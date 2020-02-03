@@ -7,11 +7,6 @@ var bodyParser = require('body-parser');
 var VoiceResponse = twilio.twiml.VoiceResponse;
 
 
-
-
-
-
-
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -53,5 +48,5 @@ app.post('/call', twilio.webhook({validate: false}), function(req, res, next) {
     res.send(twiml.toString());
   });
 
-http.createServer(app).listen(1337, '127.0.0.1');
+http.createServer(app).listen(process.env.PORT||80);
 console.log('Twilio Client app server running at http://127.0.0.1:1337/');
