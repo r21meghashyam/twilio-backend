@@ -11,6 +11,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors({origin:'http://localhost:3000',}))
+app.use(express.static('public'))
 
 
 app.get('/token', function (req, res) {
@@ -49,4 +50,4 @@ app.post('/call', twilio.webhook({validate: false}), function(req, res, next) {
   });
 
 http.createServer(app).listen(process.env.PORT||80);
-console.log('Twilio Client app server running at http://127.0.0.1:1337/');
+console.log(`Twilio Client app server running at http://localhost:${process.env.PORT||80}/`);
