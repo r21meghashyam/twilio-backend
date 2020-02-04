@@ -4,9 +4,9 @@ var cors = require('cors')
 const ClientCapability = require('twilio').jwt.ClientCapability;
 const twilio = require('twilio');
 var bodyParser = require('body-parser');
+const dotenv = require('dotenv');
 var VoiceResponse = twilio.twiml.VoiceResponse;
-
-
+dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -16,12 +16,12 @@ app.use(express.static('public'))
 
 app.get('/token', function (req, res) {
     var capability = new ClientCapability({
-        accountSid: "AC0a47ed2c2e924b2592738b24036b132f",
-        authToken: "26301ef7160e99d3e9d652aefbdffd79"
+        accountSid: process.env.TWILIO_ACCOUNT_SID,
+        authToken: process.env.TWILIO_AUTH_TOKEN
     });
     capability.addScope(
       new ClientCapability.OutgoingClientScope({
-        applicationSid: "AP75c10fd6c22772ef2dc8ed89fdc57f18"}));
+        applicationSid: process.env.TWILIO_APPLICATION_SID}));
     capability.addScope(
       new ClientCapability.IncomingClientScope("support_agent"));
   
@@ -35,7 +35,7 @@ app.post('/voice', (req, res) => {
 
 app.post('/call', twilio.webhook({validate: false}), function(req, res, next) {
     var phoneNumber = req.body.phoneNumber;
-    var callerId = +17176090847;
+    var callerId = process.env.TWILIO_PHONE_NUMBER;
     var twiml = new VoiceResponse();
   
     var dial = twiml.dial({callerId : callerId});
